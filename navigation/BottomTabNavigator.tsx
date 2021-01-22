@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { observer } from 'mobx-react';
 import * as React from 'react';
+import { useState } from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -12,24 +14,34 @@ import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
+  const [isEmergency, setIsEmergency] = useState<boolean>(false);
   const colorScheme = useColorScheme();
+
+  const declareEmergency = () => {
+    setIsEmergency(true);
+  };
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      initialRouteName='TabOne'
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+    >
       <BottomTab.Screen
-        name="TabOne"
+        name='TabOne'
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='ios-code' color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name='TabTwo'
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='ios-code' color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -46,17 +58,17 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
-function TabOneNavigator() {
+const TabOneNavigator = observer(() => {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
+        name='TabOneScreen'
         component={TabOneScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
     </TabOneStack.Navigator>
   );
-}
+});
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
@@ -64,7 +76,7 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="TabTwoScreen"
+        name='TabTwoScreen'
         component={TabTwoScreen}
         options={{ headerTitle: 'Tab Two Title' }}
       />
