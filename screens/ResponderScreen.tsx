@@ -1,15 +1,31 @@
+import { observer } from 'mobx-react';
+import { getOwnPropertyDescriptors } from 'mobx/dist/internal';
 import * as React from 'react';
 import { Pressable, StyleSheet, Vibration } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
+import { EMERGENCY_STORE } from '../stores/storesKeys';
 
-const emergencyStore = new EmergencyStore();
+const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
-export default function ResponderScreen() {
+const ResponderScreen = observer(() => {
   return (
     <View style={styles.container}>
+      <View style={styles.emergencyStatus}>
+        <Text>
+          {emergencyStore.getEmergency
+            ? 'EMERGENCY IN PROGRESS'
+            : 'NO EMERGENCY'}
+        </Text>
+        <Text>
+          {emergencyStore.getFirstResponder
+            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponder}`
+            : ''}
+        </Text>
+      </View>
       <Pressable
         disabled={emergencyStore.getEmergency}
         onLongPress={() => (
@@ -25,13 +41,17 @@ export default function ResponderScreen() {
       </Pressable>
     </View>
   );
-}
+});
+
+export default ResponderScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'grey',
   },
   alertButton: {
     backgroundColor: '#ABCBA9',
@@ -47,6 +67,15 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'monospace',
+  },
+  emergencyStatus: {
+    height: 50,
+    width: '50%',
+    alignItems: 'center',
+    textAlignVertical: 'top',
+    borderWidth: 2,
+    borderColor: 'red',
+    marginBottom: 100,
   },
   cancelButton: {
     backgroundColor: 'green',

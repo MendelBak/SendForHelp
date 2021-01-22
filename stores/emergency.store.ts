@@ -17,11 +17,15 @@ export default class EmergencyStore {
     this.isEmergency = false;
   }
 
-  get getEmergency() {
+  get getEmergency(): boolean {
     return this.isEmergency;
   }
 
   setFirstResponder(id: string) {
     this.firstResponder = id;
+  }
+
+  get getFirstResponder() {
+    return this.firstResponder;
   }
 }

@@ -9,10 +9,12 @@ import { observer } from 'mobx-react';
 import EmergencyStore from '../stores/emergency.store';
 
 const emergencyStore = new EmergencyStore();
-
-const userScreen = observer(() => {
+const UserScreen = observer(() => {
   return (
     <View style={styles.container}>
+      <Text>
+        {emergencyStore.getEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}
+      </Text>
       <Pressable
         disabled={emergencyStore.getEmergency}
         onLongPress={() => (
@@ -44,7 +46,7 @@ const userScreen = observer(() => {
   );
 });
 
-export default userScreen;
+export default UserScreen;
 
 const styles = StyleSheet.create({
   container: {

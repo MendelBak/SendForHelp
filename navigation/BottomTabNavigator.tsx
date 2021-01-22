@@ -7,19 +7,14 @@ import { useState } from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import userScreen from '../screens/UserScreen';
+import UserScreen from '../screens/UserScreen';
 import ResponderScreen from '../screens/ResponderScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
-  const [isEmergency, setIsEmergency] = useState<boolean>(false);
   const colorScheme = useColorScheme();
-
-  const declareEmergency = () => {
-    setIsEmergency(true);
-  };
 
   return (
     <BottomTab.Navigator
@@ -63,7 +58,7 @@ const TabOneNavigator = observer(() => {
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name='TabOneScreen'
-        component={userScreen}
+        component={UserScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
     </TabOneStack.Navigator>
