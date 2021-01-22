@@ -10,22 +10,17 @@ import EmergencyStore from '../stores/emergency.store';
 
 const emergencyStore = new EmergencyStore();
 
-const TabOneScreen = observer(() => {
+const userScreen = observer(() => {
   return (
     <View style={styles.container}>
       <Pressable
-        disabled={emergencyStore.isEmergency}
+        disabled={emergencyStore.getEmergency}
         onLongPress={() => (
           emergencyStore.declareEmergency(),
-          alert(
-            emergencyStore.isEmergency
-              ? 'SENDING FOR HELP'
-              : 'HELP IS ON ITS WAY'
-          ),
+          alert('SENDING FOR HELP'),
           Vibration.vibrate(200)
         )}
         style={styles.alertButton}
-         background={TouchableNativeFeedback.Ripple('red', true)}
       >
         <View style={styles.alertButton}>
           <Text style={styles.alertButton__text}>SEND FOR HELP</Text>
@@ -33,15 +28,13 @@ const TabOneScreen = observer(() => {
       </Pressable>
 
       <Pressable
-        disabled={!emergencyStore.isEmergency}
+        disabled={!emergencyStore.getEmergency}
         onLongPress={() => (
-          alert(`Call for help canceled ${emergencyStore.isEmergency}`),
-          emergencyStore.resolveEmergency(),
-          // disabled={true},
+          alert(`Call for help canceled ${emergencyStore.getEmergency}`),
+          emergencyStore.cancelEmergency(),
           Vibration.vibrate(200)
         )}
         style={styles.cancelButton}
-        //  background={TouchableNativeFeedback.Ripple('red', true)}
       >
         <View style={styles.cancelButton}>
           <Text style={styles.cancelButton__text}>CANCEL EMERGENCY</Text>
@@ -51,7 +44,7 @@ const TabOneScreen = observer(() => {
   );
 });
 
-export default TabOneScreen;
+export default userScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -81,8 +74,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 200,
     marginTop: 20,
-    // height: 100,
-    // borderRadius: 100,
   },
   cancelButton__text: {
     fontSize: 20,

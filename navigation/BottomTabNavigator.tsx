@@ -7,8 +7,8 @@ import { useState } from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import userScreen from '../screens/UserScreen';
+import ResponderScreen from '../screens/ResponderScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -63,7 +63,7 @@ const TabOneNavigator = observer(() => {
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name='TabOneScreen'
-        component={TabOneScreen}
+        component={userScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
     </TabOneStack.Navigator>
@@ -77,7 +77,7 @@ function TabTwoNavigator() {
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
         name='TabTwoScreen'
-        component={TabTwoScreen}
+        component={ResponderScreen}
         options={{ headerTitle: 'Tab Two Title' }}
       />
     </TabTwoStack.Navigator>
