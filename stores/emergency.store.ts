@@ -74,7 +74,6 @@ export default class EmergencyStore {
   }
 
   get getLocation(): EmergencyLocationModel {
-    console.log('test', this.location)
     return this.location;
   }
 

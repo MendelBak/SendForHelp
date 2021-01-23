@@ -1,8 +1,6 @@
-import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Vibration } from 'react-native';
+import { Linking, Pressable, StyleSheet, Vibration } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import rootStores from '../stores';
@@ -12,11 +10,6 @@ import { EMERGENCY_STORE } from '../stores/storesKeys';
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const ResponderScreen = observer(() => {
-  // autorun(() => {
-  //   console.log('autorun', emergencyStore.firstResponder);
-  //   console.log('autorun isEmergency', emergencyStore.isEmergency);
-  // });
-
   return (
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
@@ -26,7 +19,7 @@ const ResponderScreen = observer(() => {
             : 'NO EMERGENCY'}
         </Text>
         <Text>
-          {emergencyStore.getFirstResponder 
+          {emergencyStore.getFirstResponder
             ? `FIRST RESPONDER: ${emergencyStore.getFirstResponder}`
             : ''}
         </Text>
@@ -34,14 +27,22 @@ const ResponderScreen = observer(() => {
 
       <Pressable style={styles.welcome}>
         <Text>Location of Emergency</Text>
-        <Text>LatitudeTest: {emergencyStore.getLocation.latitude}</Text>
-        <Text>LatitudeTest: {emergencyStore.getLocation.longitude}</Text>
+        <Text>Latitude: {emergencyStore.getLocation.latitude}</Text>
+        <Text>Longitude: {emergencyStore.getLocation.longitude}</Text>
       </Pressable>
 
       <Pressable
-        disabled={!emergencyStore.getEmergency}
+        disabled={
+          !emergencyStore.getEmergency ||
+          !emergencyStore.getLocation.latitude ||
+          !emergencyStore.getLocation.longitude
+        }
         onPress={() => (
-          emergencyStore.setFirstResponder('Mendel'), Vibration.vibrate(200)
+          emergencyStore.setFirstResponder('Mendel'),
+          Vibration.vibrate(200),
+          Linking.openURL(
+            `https://www.google.com/maps/search/?api=1&query=${emergencyStore.getLocation.latitude}+${emergencyStore.getLocation.longitude}`
+          )
         )}
         style={styles.alertButton}
       >
@@ -62,13 +63,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'grey',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
     borderWidth: 2,
-    borderColor: 'grey',
+    color: 'black',
+    backgroundColor: 'grey',
   },
   alertButton: {
     backgroundColor: '#ABCBA9',
@@ -93,6 +96,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'red',
     marginBottom: 100,
+    color: 'grey',
   },
   cancelButton: {
     backgroundColor: 'green',

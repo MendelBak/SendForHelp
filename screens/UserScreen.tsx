@@ -1,18 +1,12 @@
-import {
-  Vibration,
-  TouchableNativeFeedback,
-  Pressable,
-  Alert,
-} from 'react-native';
+import { Vibration, Pressable } from 'react-native';
 import * as React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { observer } from 'mobx-react';
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
-import { action, toJS, trace } from 'mobx';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
@@ -67,6 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'grey',
+    backgroundColor: 'white',
   },
   alertButton: {
     backgroundColor: '#ABCBA9',

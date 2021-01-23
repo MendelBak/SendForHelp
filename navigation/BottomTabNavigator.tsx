@@ -10,6 +10,9 @@ import useColorScheme from '../hooks/useColorScheme';
 import UserScreen from '../screens/UserScreen';
 import ResponderScreen from '../screens/ResponderScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import rootStores from '../stores';
+import EmergencyStore from '../stores/emergency.store';
+import { EMERGENCY_STORE } from '../stores/storesKeys';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -49,6 +52,8 @@ function TabBarIcon(props: { name: string; color: string }) {
   return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
 
+const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
@@ -59,7 +64,11 @@ const TabOneNavigator = observer(() => {
       <TabOneStack.Screen
         name='TabOneScreen'
         component={UserScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{
+          headerTitle: emergencyStore.getEmergency
+            ? 'EMERGENCY IN PROGRESS'
+            : '',
+        }}
       />
     </TabOneStack.Navigator>
   );
@@ -73,7 +82,11 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name='TabTwoScreen'
         component={ResponderScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{
+          headerTitle: emergencyStore.getEmergency
+            ? 'EMERGENCY IN PROGRESS'
+            : '',
+        }}
       />
     </TabTwoStack.Navigator>
   );

@@ -3,8 +3,8 @@ export default class EmergencyLocationModel {
   altitude;
   accuracy;
   heading;
-  longitude;
-  latitude;
+  longitude: number = 0;
+  latitude: number = 0;
   speed;
   timestamp;
 
