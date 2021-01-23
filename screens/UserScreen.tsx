@@ -1,26 +1,40 @@
-import { Vibration, TouchableNativeFeedback, Pressable } from 'react-native';
+import {
+  Vibration,
+  TouchableNativeFeedback,
+  Pressable,
+  Alert,
+} from 'react-native';
 import * as React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
-// import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { observer } from 'mobx-react';
 import EmergencyStore from '../stores/emergency.store';
+import rootStores from '../stores';
+import { EMERGENCY_STORE } from '../stores/storesKeys';
+import { action, toJS, trace } from 'mobx';
 
-const emergencyStore = new EmergencyStore();
+const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+
 const UserScreen = observer(() => {
   return (
     <View style={styles.container}>
-      <Text>
-        {emergencyStore.getEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}
-      </Text>
+      <View style={styles.emergencyStatus}>
+        <Text>
+          {emergencyStore.getEmergency
+            ? 'EMERGENCY IN PROGRESS'
+            : 'NO EMERGENCY'}
+        </Text>
+        <Text>
+          {emergencyStore.getFirstResponder
+            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponder}`
+            : ''}
+        </Text>
+      </View>
       <Pressable
         disabled={emergencyStore.getEmergency}
-        onLongPress={() => (
-          emergencyStore.declareEmergency(),
-          alert('SENDING FOR HELP'),
-          Vibration.vibrate(200)
+        onPress={() => (
+          emergencyStore.declareEmergency(), Vibration.vibrate(200)
         )}
         style={styles.alertButton}
       >
@@ -31,10 +45,8 @@ const UserScreen = observer(() => {
 
       <Pressable
         disabled={!emergencyStore.getEmergency}
-        onLongPress={() => (
-          alert(`Call for help canceled ${emergencyStore.getEmergency}`),
-          emergencyStore.cancelEmergency(),
-          Vibration.vibrate(200)
+        onPress={() => (
+          emergencyStore.cancelEmergency(), Vibration.vibrate(200)
         )}
         style={styles.cancelButton}
       >
@@ -53,6 +65,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'grey',
   },
   alertButton: {
     backgroundColor: '#ABCBA9',
@@ -62,6 +76,15 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
+  },
+  emergencyStatus: {
+    height: 50,
+    width: '50%',
+    alignItems: 'center',
+    textAlignVertical: 'top',
+    borderWidth: 2,
+    borderColor: 'red',
+    marginBottom: 100,
   },
   alertButton__text: {
     fontSize: 20,
