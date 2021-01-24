@@ -8,6 +8,8 @@ import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
 
+// navigator.geolocation = require('@react-native-community/geolocation');
+
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const UserScreen = observer(() => {

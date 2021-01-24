@@ -7,6 +7,7 @@ import {
 } from 'mobx';
 import { Alert } from 'react-native';
 import EmergencyLocationModel from '../models/emergencyLocation.model';
+import Geolocation from '@react-native-community/geolocation';
 
 import { configure } from 'mobx';
 
@@ -59,13 +60,8 @@ export default class EmergencyStore {
   }
 
   getCurrentPosition(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setEmergencyLocation(position);
-        return position;
-      },
-      (error) => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    Geolocation.getCurrentPosition((position) =>
+      this.setEmergencyLocation(position)
     );
   }
 
