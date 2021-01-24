@@ -11,6 +11,11 @@ export default {
               TabOneScreen: 'one',
             },
           },
+          Symptoms: {
+            screens: {
+              SymptomsScreen: 'symptoms',
+            },
+          },
           TabTwo: {
             screens: {
               TabTwoScreen: 'two',

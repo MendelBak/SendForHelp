@@ -12,6 +12,10 @@ export type TabOneParamList = {
   TabOneScreen: undefined;
 };
 
+export type SymptomsParamList = {
+  SymptomsScreen: undefined;
+};
+
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };

@@ -3,13 +3,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-import { useState } from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import UserScreen from '../screens/UserScreen';
 import ResponderScreen from '../screens/ResponderScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import {
+  BottomTabParamList,
+  SymptomsParamList,
+  TabOneParamList,
+  TabTwoParamList,
+} from '../types';
 import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
@@ -27,6 +31,15 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name='TabOne'
         component={TabOneNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='ios-code' color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name='Symptoms'
+        component={SymptomsNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name='ios-code' color={color} />
@@ -71,6 +84,20 @@ const TabOneNavigator = observer(() => {
         }}
       />
     </TabOneStack.Navigator>
+  );
+});
+
+const SymptomsStack = createStackNavigator<SymptomsParamList>();
+
+const SymptomsNavigator = observer(() => {
+  return (
+    <SymptomsStack.Navigator>
+      <SymptomsStack.Screen
+        name='SymptomsScreen'
+        component={UserScreen}
+        options={{ headerTitle: 'WHAT IS HAPPENING?' }}
+      />
+    </SymptomsStack.Navigator>
   );
 });
 
