@@ -1,19 +1,21 @@
+// External
 import { Vibration, Pressable } from 'react-native';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-
 import { Text, View } from '../components/Themed';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
+
+// Internal
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
-
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const UserScreen = observer(() => {
   return (
     <View style={styles.container}>
+
       <View style={styles.emergencyStatus}>
         <Text>
           {emergencyStore.getEmergency

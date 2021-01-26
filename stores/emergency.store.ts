@@ -1,20 +1,15 @@
-import {
-  action,
-  computed,
-  getDependencyTree,
-  makeAutoObservable,
-  trace,
-} from 'mobx';
-import { Alert } from 'react-native';
+import { makeAutoObservable } from 'mobx';
 import EmergencyLocationModel from '../models/emergencyLocation.model';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 import { configure } from 'mobx';
+import { Alert } from 'react-native';
+import SymptomsModel from '../models/symptoms.model';
 
 configure({
   enforceActions: 'always',
   computedRequiresReaction: true,
-  reactionRequiresObservable: true,
+  // reactionRequiresObservable: true,
   observableRequiresReaction: true,
   disableErrorBoundaries: false,
 });
@@ -25,6 +20,8 @@ export default class EmergencyStore {
   private location: EmergencyLocationModel = new EmergencyLocationModel();
 
   private firstResponder: string = '';
+
+  private symptoms: SymptomsModel = new SymptomsModel();
 
   constructor() {
     makeAutoObservable(this);
@@ -38,11 +35,12 @@ export default class EmergencyStore {
   cancelEmergency(): void {
     this.isEmergency = false;
     this.clearFirstResponder();
+    // Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
     this.clearLocation();
+    this.clearSymptoms();
   }
 
   get getEmergency(): boolean {
-    trace();
     return this.isEmergency;
   }
 
@@ -55,13 +53,33 @@ export default class EmergencyStore {
   }
 
   get getFirstResponder() {
-    trace();
     return this.firstResponder;
   }
-
-  getCurrentPosition(): void {
-    Geolocation.getCurrentPosition((position) =>
-      this.setEmergencyLocation(position)
+  //#region location
+  async getCurrentPosition() {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        this.setEmergencyLocation(position);
+        console.log(position);
+      },
+      (error) => {
+        Alert.alert(
+          `Code ${error.code}`,
+          `You must allow GPS tracking: ${error.message}`
+        );
+        console.log(error);
+      },
+      {
+        accuracy: {
+          android: 'high',
+          ios: 'best',
+        },
+        enableHighAccuracy: true,
+        timeout: 15000,
+        distanceFilter: 0,
+        forceRequestLocation: true,
+        showLocationDialog: true,
+      }
     );
   }
 
@@ -76,4 +94,19 @@ export default class EmergencyStore {
   clearLocation(): void {
     this.location = new EmergencyLocationModel();
   }
+  //#endregion location
+
+  //#region symptoms
+  saveSymptoms(symptoms: SymptomsModel) {
+    this.symptoms = new SymptomsModel(symptoms);
+  }
+
+  get getSymptoms(): SymptomsModel {
+    return this.symptoms;
+  }
+
+  clearSymptoms(): void {
+    this.symptoms = new SymptomsModel();
+  }
+  //#endregion symptoms
 }

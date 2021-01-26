@@ -1,6 +1,6 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import { Linking, Pressable, StyleSheet, Vibration } from 'react-native';
+import { Pressable, StyleSheet, Vibration } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import rootStores from '../stores';
@@ -11,24 +11,69 @@ import SymptomsModel from '../models/symptoms.model';
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const SymptomsScreen = observer(() => {
+  const symptoms: SymptomsModel = new SymptomsModel();
+
   return (
     <View style={styles.container}>
-      <View style={styles.emergencyStatus}>
-        <Text></Text>
-      </View>
+      <View style={styles.card__container}>
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20), (symptoms.choking = !symptoms.choking)
+          )}
+          style={styles.card}
+        >
+          <Text>CHOKING</Text>
+        </Pressable>
 
-      <Pressable style={styles.welcome}>
-        <Text>CHOKING</Text>
-      </Pressable>
-      <Pressable style={styles.welcome}>
-        <Text>DROWING</Text>
-      </Pressable>
-      <Pressable style={styles.welcome}>
-        <Text>BLEEDING</Text>
-      </Pressable>
-      <Pressable style={styles.welcome}>
-        <Text>HIT BY HEAVY OBJECT</Text>
-      </Pressable>
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20), (symptoms.drowning = !symptoms.drowning)
+          )}
+          style={styles.card}
+        >
+          <Text>DROWING</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20),
+            (symptoms.hemmoraging = !symptoms.hemmoraging)
+          )}
+          style={styles.card}
+        >
+          <Text>BLEEDING</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20),
+            (symptoms.bluntTrauma = !symptoms.bluntTrauma)
+          )}
+          style={styles.card}
+        >
+          <Text>HIT BY HEAVY OBJECT</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20), (symptoms.other = !symptoms.other)
+          )}
+          style={styles.card}
+        >
+          <Text>OTHER</Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => (
+            Vibration.vibrate(20),
+            console.log(symptoms),
+            emergencyStore.saveSymptoms(symptoms)
+          )}
+          style={styles.card}
+        >
+          <Text>CONTINUE</Text>
+        </Pressable>
+      </View>
     </View>
   );
 });
@@ -38,29 +83,28 @@ export default SymptomsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'grey',
     backgroundColor: 'white',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    borderWidth: 2,
-    color: 'black',
-    backgroundColor: 'grey',
+  card__container: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    // alignContent: 'space-between',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    height: '100%',
   },
-
-  emergencyStatus: {
-    height: 50,
+  card: {
+    backgroundColor: 'grey',
+    height: '20%',
     width: '50%',
     alignItems: 'center',
-    textAlignVertical: 'top',
+    justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'red',
     marginBottom: 100,
-    color: 'grey',
   },
 });

@@ -4,8 +4,10 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  'Call For Help': undefined;
+  'First Responder': undefined;
+  'Symptoms': undefined; 
+  'Location Details': undefined;
 };
 
 export type TabOneParamList = {
@@ -14,6 +16,10 @@ export type TabOneParamList = {
 
 export type SymptomsParamList = {
   SymptomsScreen: undefined;
+};
+
+export type LocationDetailsParamList = {
+  LocationDetailsScreen: undefined;
 };
 
 export type TabTwoParamList = {

@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { Linking, Pressable, StyleSheet, Vibration } from 'react-native';
 
@@ -10,6 +10,8 @@ import { EMERGENCY_STORE } from '../stores/storesKeys';
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const ResponderScreen = observer(() => {
+  const symptoms = emergencyStore.getSymptoms;
+
   return (
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
@@ -50,6 +52,25 @@ const ResponderScreen = observer(() => {
           <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
         </View>
       </Pressable>
+
+      {emergencyStore.getEmergency ? (
+        <View
+          style={{
+            backgroundColor: 'grey',
+            width: 'auto',
+            height: 'auto',
+            padding: 10,
+          }}
+        >
+          <Text style={{ color: 'white' }}>
+            -- Choking: {symptoms.choking.toString()}
+          </Text>
+          <Text>-- Drowning: {symptoms.drowning.toString()}</Text>
+          <Text>-- Hemmoraging: {symptoms.hemmoraging.toString()}</Text>
+          <Text>-- Blunt Trauma: {symptoms.bluntTrauma.toString()}</Text>
+          <Text>-- Other: {symptoms.other.toString()}</Text>
+        </View>
+      ) : null}
     </View>
   );
 });
